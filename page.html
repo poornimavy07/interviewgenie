@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Interview Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7fa;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            background-image: url('background.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            padding: 20px;
+            box-sizing: border-box;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #4CAF50;
+            font-size: 30px;
+        }
+
+        .test-container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+            transition: transform 0.3s ease;
+        }
+
+        .test-container:hover {
+            transform: translateY(-10px);
+        }
+
+        .btn, .login-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn:hover, .login-btn:hover {
+            background-color: #45a049;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        input[type="text"]:focus, 
+        input[type="password"]:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+            padding-top: 30px;
+            text-align: center;
+        }
+
+        a {
+            color: #4CAF50;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .question-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .answer-btn {
+            background-color: #f1f1f1;
+            border: 1px solid #ccc;
+            padding: 10px 15px;
+            margin: 8px 0;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+            border-radius: 5px;
+        }
+
+        .answer-btn:hover {
+            background-color: #e9e9e9;
+        }
+
+        #video-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0;
+            background-color: #4CAF50;
+            border-radius: 5px;
+        }
+
+        .feedback {
+            color: #333;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        /* Add image styles */
+        #login-page img {
+            width: 80px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        #camera-page img {
+            width: 100px;
+            height: auto;
+            margin-top: 10px;
+        }
+
+        .material-icons {
+            font-size: 48px;
+            color: #4CAF50;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- HOME PAGE -->
+    <div id="home-page" class="test-container">
+        <h2>Welcome to Our Company</h2>
+        <p>We are excited to have you for the interview process. Please click below to begin.</p>
+        <button class="btn" onclick="goToLoginPage()">Start Interview</button>
+    </div>
+
+    <!-- LOGIN PAGE -->
+    <div id="login-page" class="login-container" style="display: none;">
+        <h2>Login</h2>
+        <i class="material-icons">lock</i>
+        <form id="login-form">
+            <input type="text" id="username" name="username" placeholder="Username" required><br>
+            <input type="password" id="password" name="password" placeholder="Password" required><br>
+            <button type="submit" class="login-btn">Login</button>
+        </form>
+        <a href="javascript:void(0)" onclick="goToCameraPage()">New user? Register here</a>
+    </div>
+
+    <!-- CAMERA AND MICROPHONE PAGE -->
+    <div id="camera-page" class="test-container" style="display: none;">
+        <h2>Camera and Microphone Access</h2>
+        <i class="material-icons">camera_alt</i>
+        <button class="btn" onclick="startCamera()">Start Camera</button>
+        <div id="video-container"></div>
+    </div>
+
+    <!-- APTITUDE TEST PAGE -->
+    <div id="aptitude-page" class="test-container" style="display: none;">
+        <h2>Aptitude Test</h2>
+        <div id="question-container" class="question-container">
+            <p id="question"></p>
+            <button class="answer-btn" data-answer="a"></button>
+            <button class="answer-btn" data-answer="b"></button>
+            <button class="answer-btn" data-answer="c"></button>
+            <button class="answer-btn" data-answer="d"></button>
+        </div>
+        <div class="progress-bar-container">
+            <div id="progress-bar" class="progress-bar"></div>
+        </div>
+        <button class="btn" id="next-button" onclick="nextQuestion()">Next</button>
+    </div>
+
+    <!-- CODING TEST PAGE -->
+    <div id="coding-page" class="test-container" style="display: none;">
+        <h2>Coding Test</h2>
+        <p>Write a function to find the length of the longest substring without repeating characters:</p>
+        <textarea id="code-input" rows="10" cols="50"></textarea><br><br>
+        <button class="btn" onclick="submitCode()">Submit</button>
+        <div id="feedback" class="feedback"></div>
+    </div>
+
+    <!-- RESULTS PAGE -->
+    <div id="results-page" class="test-container" style="display: none;">
+        <h2>Your Test Results</h2>
+        <p>Your Aptitude Test score: <span id="aptitude-score">0</span>/5</p>
+        <p>Your Coding Test: <span id="coding-score">Not Submitted</span></p>
+        <button class="btn" onclick="finish()">Finish</button>
+    </div>
+
+    <script>
+        let aptitudeScore = 0;
+        let currentQuestion = 0;
+
+        // Questions
+        const questions = [
+            { question: "A man can complete a task in 12 days, and his assistant can complete the same task in 18 days. How long will it take for both of them to complete the task if they work together?", answers: ["a) 7.2 days", "b) 8.4 days", "c) 9 days", "d) 10 days"], correct: "a" },
+            { question: "A company produces 300 units in 5 hours. How many units will it produce in 12 hours?", answers: ["a) 720", "b) 600", "c) 540", "d) 500"], correct: "b" },
+            { question: "A person walks 15 meters North, 10 meters East, and 5 meters South. What is the shortest distance from the starting point?", answers: ["a) 10 meters", "b) 12 meters", "c) 14 meters", "d) 18 meters"], correct: "b" },
+            { question: "A car travels 150 km in 3 hours. If it increases its speed by 50%, how long will it take to travel the same distance?", answers: ["a) 1.5 hours", "b) 2 hours", "c) 2.5 hours", "d) 3 hours"], correct: "a" },
+            { question: "A rectangle has a length of 10 cm and a width of 5 cm. If the length is increased by 50%, and the width is decreased by 20%, what will be the new area of the rectangle?", answers: ["a) 50 cm²", "b) 60 cm²", "c) 75 cm²", "d) 80 cm²"], correct: "c" }
+        ];
+
+        // Function to shuffle the questions array
+        function shuffleQuestions() {
+            return questions.sort(() => Math.random() - 0.5);
+        }
+
+        // Function to go to the login page
+        function goToLoginPage() {
+            document.getElementById("home-page").style.display = "none";
+            document.getElementById("login-page").style.display = "block";
+        }
+
+        // Handle Login
+        document.getElementById("login-form").addEventListener("submit", function (e) {
+            e.preventDefault();
+            const username = document.getElementById("username").value;
+            alert(`Logged in successfully as ${username}`);
+            document.getElementById("login-page").style.display = "none";
+            document.getElementById("camera-page").style.display = "block";
+        });
+
+        // Start Camera Access
+        function startCamera() {
+            navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+                .then(function (stream) {
+                    const video = document.createElement('video');
+                    video.srcObject = stream;
+                    video.play();
+                    document.getElementById('video-container').appendChild(video);
+                    document.getElementById("camera-page").style.display = "none";
+                    document.getElementById("aptitude-page").style.display = "block";
+                })
+                .catch(function (err) {
+                    alert('Failed to access media devices');
+                });
+        }
+
+        // Aptitude Test Logic
+        document.querySelectorAll(".answer-btn").forEach((button) => {
+            button.addEventListener("click", function () {
+                if (button.getAttribute('data-answer') === shuffledQuestions[currentQuestion].correct) {
+                    aptitudeScore++;
+                }
+                nextQuestion();
+            });
+        });
+
+        function nextQuestion() {
+            currentQuestion++;
+            if (currentQuestion < shuffledQuestions.length) {
+                document.getElementById("question").innerText = shuffledQuestions[currentQuestion].question;
+                document.querySelectorAll(".answer-btn").forEach((button, index) => {
+                    button.innerText = shuffledQuestions[currentQuestion].answers[index];
+                });
+                updateProgress();
+            } else {
+                alert("Aptitude Test Completed!");
+                document.getElementById("aptitude-page").style.display = "none";
+                document.getElementById("coding-page").style.display = "block";
+            }
+        }
+
+        // Update Progress Bar
+        function updateProgress() {
+            const progress = (currentQuestion / shuffledQuestions.length) * 100;
+            document.getElementById("progress-bar").style.width = `${progress}%`;
+        }
+
+        // Coding Test Logic
+        function submitCode() {
+            const code = document.getElementById("code-input").value;
+            if (code.includes("reverse")) {
+                document.getElementById("feedback").innerText = "Good job! Code looks fine.";
+                document.getElementById("coding-score").innerText = "Passed";
+            } else {
+                document.getElementById("feedback").innerText = "Check your code syntax or logic.";
+                document.getElementById("coding-score").innerText = "Failed";
+            }
+            document.getElementById("coding-page").style.display = "none";
+            document.getElementById("results-page").style.display = "block";
+            document.getElementById("aptitude-score").innerText = aptitudeScore;
+        }
+
+        // Finish and Show Results
+        function finish() {
+            alert("Thank you for completing the interview!");
+            window.location.reload();
+        }
+
+        // Redirect to Camera Page (if user clicks register here)
+        function goToCameraPage() {
+            document.getElementById("login-page").style.display = "none";
+            document.getElementById("camera-page").style.display = "block";
+        }
+
+        let shuffledQuestions = shuffleQuestions();
+        document.getElementById("question").innerText = shuffledQuestions[currentQuestion].question;
+        document.querySelectorAll(".answer-btn").forEach((button, index) => {
+            button.innerText = shuffledQuestions[currentQuestion].answers[index];
+        });
+
+    </script>
+</body>
+
+</html>
